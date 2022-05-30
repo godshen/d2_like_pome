@@ -100,8 +100,8 @@ if __name__ == "__main__":
     print("test of qq-bot")
     is_test = True
 
-    appid_str = "102006831"
-    token_str = "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
+    appid_str = os.environ['QQ_ROBOT_APPID']  # "102006831"
+    token_str = os.environ['QQ_ROBOT_TOKEN']  # "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
     t_token = qqbot.Token(appid_str, token_str)
 
     get_username()
