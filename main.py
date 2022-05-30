@@ -45,11 +45,11 @@ async def _message_handler(event, message: qqbot.Message):
         split = content.split("/天气 ")
         weather = await get_weather(split[1])
         await send_weather_ark_message(weather, message.channel_id, message.id)
-    if "/签到" in content:
+    elif "/签到" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
-    if "/查询" in content:
+    elif "/查询" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         send = qqbot.MessageSendRequest("<@%s>查到了, 你就是大聪明！ " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
