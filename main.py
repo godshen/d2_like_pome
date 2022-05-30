@@ -13,7 +13,7 @@ from qqbot.model.message import MessageEmbed, MessageEmbedField, MessageEmbedThu
 
 
 import os
-os.environ['SSL_CERT_FILE'] = "/usr/local/ssl/qq-bot-cert.pem"
+os.environ['SSL_CERT_FILE'] = "~/.ssh/qq-bot-cert.pem"
 
 
 async def get_weather(city_name: str) -> Dict:
