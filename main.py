@@ -9,15 +9,15 @@ from qqbot.model.message import MessageEmbed, MessageEmbedField, MessageEmbedThu
     MessageArk, MessageArkKv, MessageArkObj, MessageArkObjKv
 
 
-
-
-
 async def get_weather(city_name: str) -> Dict:
     """
     获取天气信息
     :return: 返回天气数据的json对象
     """
-    weather_api_url = "http://api.k780.com/?app=weather.today&cityNm=" + city_name + "&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json"
+    weather_api_url = "http://api.k780.com/?app=weather.today&cityNm=" + \
+                      city_name + \
+                      "&appkey=%s&sign=%s&format=%s" % \
+                      ("10003", "b59bc3ef6191eb9f747dd4e83c99f2a4", "json")
     async with aiohttp.ClientSession() as session:
         async with session.get(
                 url=weather_api_url,
@@ -34,7 +34,7 @@ async def _message_handler(event, message: qqbot.Message):
     :param event: 事件类型
     :param message: 事件对象（如监听消息是Message对象）
     """
-     # 根据指令触发不同的推送消息
+    # 根据指令触发不同的推送消息
     content = message.content
     if "/天气" in content:
         # 通过空格区分城市参数
@@ -56,10 +56,19 @@ async def _message_handler(event, message: qqbot.Message):
 
 
 async def _create_ark_obj_list(weather_dict) -> List[MessageArkObj]:
-    obj_list = [MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value=weather_dict['result']['citynm'] + " " + weather_dict['result']['weather'] +  " " + weather_dict['result']['days'] + " " + weather_dict['result']['week'])]),
-                MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当日温度区间：" + weather_dict['result']['temperature'])]),
-                MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当前温度：" + weather_dict['result']['temperature_curr'])]),
-                MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当前湿度：" + weather_dict['result']['humidity'])])]
+    obj_list = [
+        MessageArkObj(obj_kv=[
+            MessageArkObjKv(key="desc", value=
+                            weather_dict['result']['citynm'] + " " +
+                            weather_dict['result']['weather'] + " " +
+                            weather_dict['result']['days'] + " " +
+                            weather_dict['result']['week'])
+            ]
+        ),
+        MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当日温度区间：" + weather_dict['result']['temperature'])]),
+        MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当前温度：" + weather_dict['result']['temperature_curr'])]),
+        MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当前湿度：" + weather_dict['result']['humidity'])])
+    ]
     return obj_list
 
 
@@ -74,9 +83,11 @@ async def send_weather_ark_message(weather_dict, channel_id, message_id):
     ark = MessageArk()
     # 模版ID=23
     ark.template_id = 23
-    ark.kv = [MessageArkKv(key="#DESC#", value="描述"),
-              MessageArkKv(key="#PROMPT#", value="提示消息"),
-              MessageArkKv(key="#LIST#", obj=await _create_ark_obj_list(weather_dict))]
+    ark.kv = [
+        MessageArkKv(key="#DESC#", value="描述"),
+        MessageArkKv(key="#PROMPT#", value="提示消息"),
+        MessageArkKv(key="#LIST#", obj=await _create_ark_obj_list(weather_dict))
+    ]
     # 通过api发送回复消息
     send = qqbot.MessageSendRequest(content="", ark=ark, msg_id=message_id)
     msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
