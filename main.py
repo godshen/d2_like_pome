@@ -1,20 +1,15 @@
-import asyncio
+import os
 import json
-import os.path
-import threading
+import asyncio
+import aiohttp
 from typing import Dict, List
 
-import aiohttp
 import qqbot
-
-from qqbot.core.util.yaml_util import YamlUtil
 from qqbot.model.message import MessageEmbed, MessageEmbedField, MessageEmbedThumbnail, CreateDirectMessageRequest, \
     MessageArk, MessageArkKv, MessageArkObj, MessageArkObjKv
 
 
-import os
-now_dir = os.path.abspath(os.path.dirname(__file__))
-os.environ['SSL_CERT_FILE'] = now_dir + "/config/qq-bot-cert.pem"
+
 
 
 async def get_weather(city_name: str) -> Dict:
@@ -56,7 +51,7 @@ async def _message_handler(event, message: qqbot.Message):
         await msg_api.post_message(message.channel_id, send)
     else:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
-        send = qqbot.MessageSendRequest("<@%s>你想干啥咧 " % message.author.id, message.id)
+        send = qqbot.MessageSendRequest("<@%s--%s>你想干啥咧 " % (message.author.bot, message.author.avatar), message.id)
         await msg_api.post_message(message.channel_id, send)
 
 
@@ -98,11 +93,14 @@ def get_username():
 
 
 if __name__ == "__main__":
-    print("test of qq-bot")
+    print("project of qq-bot of d2_pome")
     is_test = True
 
-    appid_str = os.environ['QQ_ROBOT_APPID']  # "102006831"
-    token_str = os.environ['QQ_ROBOT_TOKEN']  # "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
+    now_dir = os.path.abspath(os.path.dirname(__file__))
+    os.environ['SSL_CERT_FILE'] = now_dir + "/config/qq-bot-cert.pem"
+
+    appid_str = os.environ['QQ_ROBOT_APPID']  # always be "102006831"
+    token_str = os.environ['QQ_ROBOT_TOKEN']  # just like "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
     t_token = qqbot.Token(appid_str, token_str)
 
     get_username()
