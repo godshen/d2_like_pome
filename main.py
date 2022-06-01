@@ -34,6 +34,14 @@ async def get_weather(city_name: str) -> Dict:
             return content_json_obj
 
 
+def check_is_signed(user_id):
+    sql = "select count(1) from `user_sign_log` where true and "
+    time_today = datetime.date.today()
+    condition = "`user_id`='%s' and date_format(`sign_time`,'%%Y-%%m-%%d')=date_format('%s','%%Y-%%m-%%d')" % (user_id, time_today)
+    cnt = db_mysql.do_select_cnt(sql + condition)
+    return cnt
+
+
 def user_sign(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel):
     if sign_time == "":
         sign_time_fmt = datetime.datetime.now()
@@ -73,15 +81,19 @@ async def _message_handler(event, message: qqbot.Message):
     elif "/签到" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         user_id = message.author.id
-        sign_reward = "积分"
-        sign_type = 1
-        sign_guild = message.guild_id
-        sign_channel = message.channel_id
-        user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
-        send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+        if check_is_signed(user_id) != 0:
+            send = qqbot.MessageSendRequest("<@%s>今天已经签到过了嗷 " % message.author.id, message.id)
+        else:
+            sign_reward = "积分"
+            sign_type = 1
+            sign_guild = message.guild_id
+            sign_channel = message.channel_id
+            user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
+            send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/补签" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
+        '''
         user_id = message.author.id
         sign_reward = "积分"
         sign_type = 2
@@ -93,11 +105,13 @@ async def _message_handler(event, message: qqbot.Message):
             send = qqbot.MessageSendRequest("<@%s>补签成功 " % message.author.id, message.id)
         else:
             send = qqbot.MessageSendRequest("<@%s>补签出了点问题 " % message.author.id, message.id)
+        '''
+        send = qqbot.MessageSendRequest("<@%s>余额不足 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/查询" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
-        c_a, c_d = get_sign_info(message.author.id)
-        send = qqbot.MessageSendRequest("<@%s>签到次数: %d, 签到天数: %d, 连续签到天数: 你拆拆" % (message.author.id, c_a, c_d), message.id)
+        _, c_d = get_sign_info(message.author.id)
+        send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: 你拆拆" % (message.author.id, c_d), message.id)
         await msg_api.post_message(message.channel_id, send)
     else:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
