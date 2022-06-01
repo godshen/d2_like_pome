@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
     get_username()
 
-    db_mysql = RobotData('34.92.55.1', 3306, 'develop', 'Sjzez=19480913', 'robot', 600)
+    db_mysql = RobotData('localhost', 3306, 'develop', 'Sjzez=19480913', 'robot', 600)
 
     # @机器人后推送被动消息
     qqbot_handler = qqbot.Handler(
