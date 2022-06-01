@@ -43,7 +43,7 @@ def user_sign(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_chann
 
 
 def _do_insert_sign_data(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel):
-    sql = "insert into `user_sign_log`(`user_id`, `sign_reward`, `sign_type`, `sign_time`, ``sign_guild`, `sign_channel`) values(%s,%s,%s,%s,%s,%s)"
+    sql = "insert into `user_sign_log`(`user_id`, `sign_reward`, `sign_type`, `sign_time`, `sign_guild`, `sign_channel`) values(%s,%s,%s,%s,%s,%s)"
     val = (user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel)
     db_mysql.do_insert(sql, val)
 
@@ -89,7 +89,7 @@ async def _message_handler(event, message: qqbot.Message):
         sign_channel = message.channel_id
         sign_time = content.split("/补签 ")
         if len(sign_time) == 2:
-            user_sign(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel)
+            user_sign(user_id, sign_reward, sign_type, sign_time[1], sign_guild, sign_channel)
             send = qqbot.MessageSendRequest("<@%s>补签成功 " % message.author.id, message.id)
         else:
             send = qqbot.MessageSendRequest("<@%s>补签出了点问题 " % message.author.id, message.id)
