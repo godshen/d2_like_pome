@@ -1,3 +1,6 @@
+# !/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import os
 import json
 import asyncio
@@ -7,6 +10,8 @@ from typing import Dict, List
 import qqbot
 from qqbot.model.message import MessageEmbed, MessageEmbedField, MessageEmbedThumbnail, CreateDirectMessageRequest, \
     MessageArk, MessageArkKv, MessageArkObj, MessageArkObjKv
+
+from dao import RobotData
 
 
 async def get_weather(city_name: str) -> Dict:
@@ -28,6 +33,21 @@ async def get_weather(city_name: str) -> Dict:
             return content_json_obj
 
 
+def insert_sign_data(user_id, sign_reward, sign_type, sign_guild, sign_channel):
+    sql = "insert into `user_sign_log`(`user_id`, `sign_reward`, `sign_type`, `sign_guild`, `sign_channel`) values(%s,%s,%s,%s,%s)"
+    val = (user_id, sign_reward, sign_type, sign_guild, sign_channel)
+    db_mysql.do_insert(sql, val)
+
+
+def get_sign_info(user_id):
+    sql = "select count(1)c0, count(distinct date_format(`sign_time`,'%Y-%m-%d'))c1 from `user_sign_log` where true and "
+    condition = "`user_id`='%s'" % user_id
+    ret_data = db_mysql.do_select(sql + condition)[0]
+    cnt_all = ret_data[0]
+    cnt_day = ret_data[1]
+    return cnt_all, cnt_day
+
+
 async def _message_handler(event, message: qqbot.Message):
     """
     定义事件回调的处理
@@ -43,11 +63,18 @@ async def _message_handler(event, message: qqbot.Message):
         await send_weather_ark_message(weather, message.channel_id, message.id)
     elif "/签到" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
+        user_id = message.author.id
+        sign_reward = "积分"
+        sign_type = 1
+        sign_guild = message.guild_id
+        sign_channel = message.channel_id
+        insert_sign_data(user_id, sign_reward, sign_type, sign_guild, sign_channel)
         send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/查询" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
-        send = qqbot.MessageSendRequest("<@%s>查到了, 你就是大聪明！ " % message.author.id, message.id)
+        c_a, c_d = get_sign_info(message.author.id)
+        send = qqbot.MessageSendRequest("<@%s>签到次数: %d, 签到天数: %d, 连续签到天数: 你拆拆" % (message.author.id, c_a, c_d), message.id)
         await msg_api.post_message(message.channel_id, send)
     else:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
@@ -115,6 +142,8 @@ if __name__ == "__main__":
     t_token = qqbot.Token(appid_str, token_str)
 
     get_username()
+
+    db_mysql = RobotData('34.92.55.1', 3306, 'develop', 'Sjzez=19480913', 'robot', 600)
 
     # @机器人后推送被动消息
     qqbot_handler = qqbot.Handler(
