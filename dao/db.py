@@ -72,9 +72,9 @@ class RobotData:
         self._db.commit()
         return ""
 
-    def do_update(self, sql) -> str:
+    def do_update(self, sql, params) -> str:
         self._re_conn()
-        self._cursor.execute(sql)
+        self._cursor.execute(sql, params)
         self._db.commit()
         return ""
 
