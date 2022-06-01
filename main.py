@@ -5,6 +5,7 @@ import os
 import json
 import asyncio
 import aiohttp
+import datetime
 from typing import Dict, List
 
 import qqbot
@@ -33,9 +34,17 @@ async def get_weather(city_name: str) -> Dict:
             return content_json_obj
 
 
-def insert_sign_data(user_id, sign_reward, sign_type, sign_guild, sign_channel):
-    sql = "insert into `user_sign_log`(`user_id`, `sign_reward`, `sign_type`, `sign_guild`, `sign_channel`) values(%s,%s,%s,%s,%s)"
-    val = (user_id, sign_reward, sign_type, sign_guild, sign_channel)
+def user_sign(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel):
+    if sign_time == "":
+        sign_time_fmt = datetime.datetime.now()
+    else:
+        sign_time_fmt = datetime.datetime.strptime(sign_time+" 12:00:00", "%Y-%m-%d %H:%M:%S")
+    _do_insert_sign_data(user_id, sign_reward, sign_type, sign_time_fmt, sign_guild, sign_channel)
+
+
+def _do_insert_sign_data(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel):
+    sql = "insert into `user_sign_log`(`user_id`, `sign_reward`, `sign_type`, `sign_time`, ``sign_guild`, `sign_channel`) values(%s,%s,%s,%s,%s,%s)"
+    val = (user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel)
     db_mysql.do_insert(sql, val)
 
 
@@ -68,8 +77,22 @@ async def _message_handler(event, message: qqbot.Message):
         sign_type = 1
         sign_guild = message.guild_id
         sign_channel = message.channel_id
-        insert_sign_data(user_id, sign_reward, sign_type, sign_guild, sign_channel)
+        user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
         send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+        await msg_api.post_message(message.channel_id, send)
+    elif "/补签" in content:
+        msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
+        user_id = message.author.id
+        sign_reward = "积分"
+        sign_type = 2
+        sign_guild = message.guild_id
+        sign_channel = message.channel_id
+        sign_time = content.split("/补签 ")
+        if len(sign_time) == 2:
+            user_sign(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel)
+            send = qqbot.MessageSendRequest("<@%s>补签成功 " % message.author.id, message.id)
+        else:
+            send = qqbot.MessageSendRequest("<@%s>补签出了点问题 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/查询" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
