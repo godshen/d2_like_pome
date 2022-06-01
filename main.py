@@ -46,6 +46,44 @@ def check_is_signed(user_id):
     return cnt
 
 
+def get_continuous_days(user_id):
+    sql = "select `days` from `user_continuous_sign` where true and "
+    time_today = datetime.date.today()
+    condition = "`user_id`='%s' and date_format(`update_time`,'%%Y-%%m-%%d')=date_format('%s','%%Y-%%m-%%d')" % (user_id, time_today)
+    lines = db_mysql.do_select(sql + condition)
+    if len(lines) == 0:
+        days = 0
+    else:
+        days = lines[0][0]
+    return days
+
+
+def check_is_continuous(user_id):
+    sql = "select `id` from `user_continuous_sign` where true and "
+    time_yesterday = datetime.date.today() - datetime.timedelta(days=1)
+    condition = "`user_id`='%s' and date_format(`update_time`,'%%Y-%%m-%%d')=date_format('%s','%%Y-%%m-%%d')" % (user_id, time_yesterday)
+    lines = db_mysql.do_select(sql + condition)
+    if len(lines) == 0:
+        auto_id = 0
+    else:
+        auto_id = lines[0][0]
+    return auto_id
+
+
+def insert_continuous_beginning(user_id):
+    sql = "insert into `user_continuous_sign`(`user_id`, `days`) values(%s,%s)"
+    val = (user_id, 1)
+    db_mysql.do_insert(sql, val)
+    return 0
+
+
+def update_continuous_days(id):
+    sql = "update `user_continuous_sign` set `days`=`days`+1 where `id`=%s"
+    val = (id)
+    db_mysql.do_update(sql, val)
+    return 0
+
+
 def user_sign(user_id, sign_reward, sign_type, sign_time, sign_guild, sign_channel):
     if sign_time == "":
         sign_time_fmt = datetime.datetime.now()
@@ -94,6 +132,11 @@ async def _message_handler(event, message: qqbot.Message):
                 sign_guild = message.guild_id
                 sign_channel = message.channel_id
                 user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
+                auto_id = check_is_continuous(user_id)
+                if auto_id != 0:
+                    update_continuous_days(auto_id)
+                else:
+                    insert_continuous_beginning(user_id)
                 send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
         except:
             send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
@@ -118,8 +161,10 @@ async def _message_handler(event, message: qqbot.Message):
     elif "/查询" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         try:
-            _, c_d = get_sign_info(message.author.id)
-            send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: 你拆拆" % (message.author.id, c_d), message.id)
+            user_id = message.author.id
+            _, cnt_days = get_sign_info(user_id)
+            continuous_days = get_continuous_days(user_id)
+            send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: %d" % (user_id, cnt_days, continuous_days), message.id)
         except:
             send = qqbot.MessageSendRequest("<@%s>签到失败" % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
