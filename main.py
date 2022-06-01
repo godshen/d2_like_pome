@@ -132,7 +132,7 @@ def get_username():
 
 if __name__ == "__main__":
     print("project of qq-bot of d2_pome")
-    is_test = True
+    is_test = False
 
     now_dir = os.path.abspath(os.path.dirname(__file__))
     os.environ['SSL_CERT_FILE'] = now_dir + "/config/qq-bot-cert.pem"
@@ -143,7 +143,8 @@ if __name__ == "__main__":
 
     get_username()
 
-    db_mysql = RobotData('localhost', 3306, 'develop', 'Sjzez=19480913', 'robot', 600)
+    db_host = os.environ['ROBOT_DB_HOST']
+    db_mysql = RobotData(db_host, 3306, 'develop', 'Sjzez=19480913', 'robot', 600)
 
     # @机器人后推送被动消息
     qqbot_handler = qqbot.Handler(
