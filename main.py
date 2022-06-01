@@ -9,10 +9,14 @@ import datetime
 from typing import Dict, List
 
 import qqbot
+from qqbot.core.util import logging
 from qqbot.model.message import MessageEmbed, MessageEmbedField, MessageEmbedThumbnail, CreateDirectMessageRequest, \
     MessageArk, MessageArkKv, MessageArkObj, MessageArkObjKv
 
 from dao import RobotData
+
+
+logger = logging.getLogger()
 
 
 async def get_weather(city_name: str) -> Dict:
@@ -80,16 +84,19 @@ async def _message_handler(event, message: qqbot.Message):
         await send_weather_ark_message(weather, message.channel_id, message.id)
     elif "/签到" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
-        user_id = message.author.id
-        if check_is_signed(user_id) != 0:
-            send = qqbot.MessageSendRequest("<@%s>今天已经签到过了嗷 " % message.author.id, message.id)
-        else:
-            sign_reward = "积分"
-            sign_type = 1
-            sign_guild = message.guild_id
-            sign_channel = message.channel_id
-            user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
-            send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+        try:
+            user_id = message.author.id
+            if check_is_signed(user_id) != 0:
+                send = qqbot.MessageSendRequest("<@%s>今天已经签到过了嗷 " % message.author.id, message.id)
+            else:
+                sign_reward = "积分"
+                sign_type = 1
+                sign_guild = message.guild_id
+                sign_channel = message.channel_id
+                user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
+                send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+        except:
+            send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/补签" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
@@ -110,8 +117,11 @@ async def _message_handler(event, message: qqbot.Message):
         await msg_api.post_message(message.channel_id, send)
     elif "/查询" in content:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
-        _, c_d = get_sign_info(message.author.id)
-        send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: 你拆拆" % (message.author.id, c_d), message.id)
+        try:
+            _, c_d = get_sign_info(message.author.id)
+            send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: 你拆拆" % (message.author.id, c_d), message.id)
+        except:
+            send = qqbot.MessageSendRequest("<@%s>签到失败" % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     else:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
