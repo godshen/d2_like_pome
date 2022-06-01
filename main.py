@@ -170,7 +170,7 @@ async def _message_handler(event, message: qqbot.Message):
         await msg_api.post_message(message.channel_id, send)
     else:
         msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
-        send = qqbot.MessageSendRequest("<@%s--%s>你想干啥咧 " % (message.author.bot, message.author.avatar), message.id)
+        send = qqbot.MessageSendRequest("试试看输入[\\天气 城市名]\n[\\签到]\n[\\查询]\n", message.id)
         await msg_api.post_message(message.channel_id, send)
 
 
