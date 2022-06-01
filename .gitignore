@@ -1,3 +1,5 @@
 .idea
 .DS_Store
 qqbot.log
+qqbot.log.*
+*/__pycache__
