@@ -125,7 +125,7 @@ async def _message_handler(event, message: qqbot.Message):
         try:
             user_id = message.author.id
             if check_is_signed(user_id) != 0:
-                send = qqbot.MessageSendRequest("<@%s>今天已经签到过了嗷 " % message.author.id, message.id)
+                send = qqbot.MessageSendRequest("<@%s>今天已经签到过了呢(灬°ω°灬) " % message.author.id, message.id)
             else:
                 sign_reward = "积分"
                 sign_type = 1
