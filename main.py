@@ -1,5 +1,6 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
+import time
 import qqbot
 from qqbot.core.util import logging
 from qqbot.model.message import MessageArk, MessageArkKv
@@ -18,6 +19,7 @@ async def _message_handler(event, message: qqbot.Message):
     :param event: 事件类型
     :param message: 事件对象（如监听消息是Message对象）
     """
+    logger.info("[%d] uid: %s, uname: %s, cmd: %s" % (int(time.time()), message.author.id, message.author.username, message.content))
     # 根据指令触发不同的推送消息
     content = message.content
     msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
