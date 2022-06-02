@@ -34,7 +34,7 @@ async def _message_handler(event, message: qqbot.Message):
         send = qqbot.MessageSendRequest("早安", message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "揍圈圈" in content:
-        send = qqbot.MessageSendRequest("<@%s>揍你" % "8524802810253029980", message.id)
+        send = qqbot.MessageSendRequest("<@%s>揍你" % "12765512432620307406", message.id)
         await msg_api.post_message(message.channel_id, send)
 
     if "/天气" in content:
