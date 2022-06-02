@@ -1,13 +1,10 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
-
-import os
-import asyncio
-
 import qqbot
 from qqbot.core.util import logging
 from qqbot.model.message import MessageArk, MessageArkKv
 
+import server
 import dao
 import net
 
@@ -102,32 +99,13 @@ async def _message_handler(event, message: qqbot.Message):
         await msg_api.post_message(message.channel_id, send)
 
 
-def get_username():
-    api = qqbot.AsyncUserAPI(t_token, is_test)
-    loop = asyncio.get_event_loop()
-    user = loop.run_until_complete(api.me())
-    print(user.username)
-
-    return 0
-
-
 if __name__ == "__main__":
-    print("project of qq-bot of d2_pome")
-    is_test = False
+    print("sjzez great forever")
 
-    now_dir = os.path.abspath(os.path.dirname(__file__))
-    os.environ['SSL_CERT_FILE'] = now_dir + "/config/qq-bot-cert.pem"
+    is_test, t_token = server.init_project()
 
-    appid_str = os.environ['QQ_ROBOT_APPID']  # always be "102006831"
-    token_str = os.environ['QQ_ROBOT_TOKEN']  # just like "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
-    t_token = qqbot.Token(appid_str, token_str)
+    dao.init_business()
 
-    get_username()
-
-    db_host = os.environ['ROBOT_DB_HOST']
-    dao.RobotData(db_host, 3306, 'develop', 'Sjzez=19480913', 'robot', 600)
-
-    # @机器人后推送被动消息
     qqbot_handler = qqbot.Handler(
         qqbot.HandlerType.AT_MESSAGE_EVENT_HANDLER, _message_handler
     )

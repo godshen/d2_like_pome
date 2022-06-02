@@ -1,8 +1,6 @@
 import time
 import pymysql
 
-db_mysql = None
-
 
 class RobotData:
     def __init__(self, db_host: str, db_port: int,
@@ -17,7 +15,6 @@ class RobotData:
         self._db = None
         self._cursor = None
         self._conn()
-        db_mysql = self
 
     def _conn(self):
         try:
