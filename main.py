@@ -115,13 +115,24 @@ async def _message_handler(event, message: qqbot.Message):
     """
     # 根据指令触发不同的推送消息
     content = message.content
+    msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
+
+    if "早安" in content:
+        send = qqbot.MessageSendRequest("晚安", message.id)
+        await msg_api.post_message(message.channel_id, send)
+    elif "晚安" in content:
+        send = qqbot.MessageSendRequest("午安", message.id)
+        await msg_api.post_message(message.channel_id, send)
+    elif "午安" in content:
+        send = qqbot.MessageSendRequest("早安", message.id)
+        await msg_api.post_message(message.channel_id, send)
+
     if "/天气" in content:
         # 通过空格区分城市参数
         split = content.split("/天气 ")
         weather = await get_weather(split[1])
         await send_weather_ark_message(weather, message.channel_id, message.id)
     elif "/签到" in content:
-        msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         try:
             user_id = message.author.id
             if check_is_signed(user_id) != 0:
@@ -142,7 +153,6 @@ async def _message_handler(event, message: qqbot.Message):
             send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/补签" in content:
-        msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         '''
         user_id = message.author.id
         sign_reward = "积分"
@@ -159,7 +169,6 @@ async def _message_handler(event, message: qqbot.Message):
         send = qqbot.MessageSendRequest("<@%s>余额不足 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     elif "/查询" in content:
-        msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         try:
             user_id = message.author.id
             _, cnt_days = get_sign_info(user_id)
@@ -169,7 +178,6 @@ async def _message_handler(event, message: qqbot.Message):
             send = qqbot.MessageSendRequest("<@%s>签到失败" % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     else:
-        msg_api = qqbot.AsyncMessageAPI(t_token, is_test)
         send = qqbot.MessageSendRequest("试试看输入:\n\t[/天气 城市名]\n\t[/签到]\n\t[/查询]\n", message.id)
         await msg_api.post_message(message.channel_id, send)
 
