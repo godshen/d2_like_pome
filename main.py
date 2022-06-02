@@ -95,7 +95,7 @@ async def _message_handler(event, message: qqbot.Message):
             continuous_days = dao.get_continuous_days(user_id)
             send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: %d" % (user_id, cnt_days, continuous_days), message.id)
         except:
-            send = qqbot.MessageSendRequest("<@%s>签到失败" % message.author.id, message.id)
+            send = qqbot.MessageSendRequest("<@%s>查询失败" % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
     else:
         send = qqbot.MessageSendRequest("试试看输入:\n\t[/天气 城市名]\n\t[/签到]\n\t[/查询]\n", message.id)
