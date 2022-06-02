@@ -23,6 +23,9 @@
   - business.py       # 业务逻辑
 - net
   - weather.py        # 天气接口调用
+- server
+  - config            # 初始化依赖配置
+  - begin.py          # 机器人服务器初始化
 
 # 开发人员
  - shenzhonghao
