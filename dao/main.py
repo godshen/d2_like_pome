@@ -1,7 +1,7 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 
-from db import RobotData
+from database import RobotData
 
 sql_list = [
     "desc user_sign_log",

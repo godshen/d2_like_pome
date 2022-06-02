@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .db import RobotData
+from .database import RobotData
