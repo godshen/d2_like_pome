@@ -3,7 +3,7 @@ import qqbot
 import asyncio
 
 
-def get_username():
+def get_username(t_token, is_test):
     api = qqbot.AsyncUserAPI(t_token, is_test)
     loop = asyncio.get_event_loop()
     user = loop.run_until_complete(api.me())
@@ -19,4 +19,5 @@ def init_project():
     appid_str = os.environ['QQ_ROBOT_APPID']  # always be "102006831"
     token_str = os.environ['QQ_ROBOT_TOKEN']  # just like "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
     t_token = qqbot.Token(appid_str, token_str)
+    get_username(t_token, is_test)
     return t_token, is_test

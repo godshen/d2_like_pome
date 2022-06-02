@@ -102,7 +102,7 @@ async def _message_handler(event, message: qqbot.Message):
 if __name__ == "__main__":
     print("sjzez great forever")
 
-    is_test, t_token = server.init_project()
+    t_token, is_test = server.init_project()
 
     dao.init_business()
 
