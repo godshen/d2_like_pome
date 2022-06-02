@@ -1,5 +1,5 @@
 import datetime
-from database import db_mysql
+from .database import db_mysql
 
 
 def check_is_signed(user_id):
