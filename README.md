@@ -16,7 +16,13 @@
  - 其他: to be continued
 
 # 项目结构
-- main.py
+- main.py  # 主文件
+- dao
+  - database.py       # 数据库底层 
+  - cache.py          # 缓存底层
+  - business.py       # 业务逻辑
+- net
+  - weather.py        # 天气接口调用
 
 # 开发人员
  - shenzhonghao
