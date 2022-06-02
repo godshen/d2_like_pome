@@ -33,6 +33,9 @@ async def _message_handler(event, message: qqbot.Message):
     elif "午安" in content:
         send = qqbot.MessageSendRequest("早安", message.id)
         await msg_api.post_message(message.channel_id, send)
+    elif "揍圈圈" in content:
+        send = qqbot.MessageSendRequest("<@%s>揍你" % "8524802810253029980", message.id)
+        await msg_api.post_message(message.channel_id, send)
 
     if "/天气" in content:
         # 通过空格区分城市参数
