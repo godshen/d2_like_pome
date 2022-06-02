@@ -1,8 +1,8 @@
 import os
 import datetime
 
-import database
-import cache
+from . import database
+from . import cache
 
 db: database.RobotData = None
 rds: cache.RobotCache = None
