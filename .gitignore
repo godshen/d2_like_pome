@@ -3,3 +3,4 @@
 qqbot.log
 qqbot.log.*
 */__pycache__
+./pic/output/.*.jpg
