@@ -74,6 +74,47 @@ async def _message_handler(event, message: qqbot.Message):
         except:
             send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
         await msg_api.post_message(message.channel_id, send)
+    elif "/打卡" in content:
+        try:
+            user_id = message.author.id
+            if dao.check_is_signed(user_id) != 0:
+                send = qqbot.MessageSendRequest("<@%s>今天已经签到过了呢(灬°ω°灬) " % message.author.id, message.id)
+            else:
+                sign_reward = "积分"
+                sign_type = 1
+                sign_guild = message.guild_id
+                sign_channel = message.channel_id
+                dao.user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
+                auto_id = dao.check_is_continuous(user_id)
+                if auto_id != 0:
+                    dao.update_continuous_days(auto_id)
+                else:
+                    dao.insert_continuous_beginning(user_id)
+                send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+        except:
+            send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
+        await msg_api.post_message(message.channel_id, send)
+
+    elif "/sign" in content:
+        try:
+            user_id = message.author.id
+            if dao.check_is_signed(user_id) != 0:
+                send = qqbot.MessageSendRequest("<@%s>今天已经签到过了呢(灬°ω°灬) " % message.author.id, message.id)
+            else:
+                sign_reward = "积分"
+                sign_type = 1
+                sign_guild = message.guild_id
+                sign_channel = message.channel_id
+                dao.user_sign(user_id, sign_reward, sign_type, "", sign_guild, sign_channel)
+                auto_id = dao.check_is_continuous(user_id)
+                if auto_id != 0:
+                    dao.update_continuous_days(auto_id)
+                else:
+                    dao.insert_continuous_beginning(user_id)
+                send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+        except:
+            send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
+        await msg_api.post_message(message.channel_id, send)
     elif "/补签" in content:
         '''
         user_id = message.author.id
