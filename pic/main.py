@@ -10,7 +10,7 @@ if __name__ == "__main__":
     font = ImageFont.truetype('./template/simsun.ttf', 60)
 
     # 打开底版图片
-    imageFile = "./template/pic1.jpg"
+    imageFile = "./template/blank.jpg"
     tp = Image.open(imageFile)
 
     draw = ImageDraw.Draw(tp)
