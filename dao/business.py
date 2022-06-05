@@ -8,7 +8,7 @@ db: database.RobotData = None
 rds: cache.RobotCache = None
 
 
-def init_business():
+def init_dao():
     global db, rds
 
     db_host = os.environ['ROBOT_DB_HOST']

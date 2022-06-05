@@ -1,3 +1,1 @@
-from .begin import init_project
-
-__all__ = ["init_project"]
+from .always import init_project
