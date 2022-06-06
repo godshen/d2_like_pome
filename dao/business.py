@@ -131,4 +131,4 @@ def _calculate_points_by_days(days):
         d_03 = 0
     p_res = d_15 * _points_15 + d_07 * _points_07 + d_03 * _points_03
 
-    return [p_mon + p_res, d_30, d_15, d_07, d_03]
+    return [p_mon + p_res, d_30, d_15+d_30, d_07+d_30, d_03+d_30]
