@@ -45,9 +45,11 @@ async def service_user_re_sign(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Me
 async def service_get_sign_info(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message):
     try:
         user_id = message.author.id
-        _, cnt_days = dao.get_sign_info(user_id)
+        _, cnt_days, points = dao.get_sign_info(user_id)
         continuous_days = dao.get_continuous_days(user_id)
-        send = qqbot.MessageSendRequest("<@%s>签到天数: %d, 连续签到天数: %d" % (user_id, cnt_days, continuous_days), message.id)
+        send = qqbot.MessageSendRequest("<@%s>你的签到信息如下:\n\t累计签到: %5d\n\t连续签到: %5d天\n\t目前积分: %5d" %
+                                        (user_id, cnt_days, continuous_days, points), message.id
+                                        )
     except:
         send = qqbot.MessageSendRequest("<@%s>查询失败" % message.author.id, message.id)
     await msg_api.post_message(message.channel_id, send)

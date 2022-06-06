@@ -1,8 +1,8 @@
 import os
 import datetime
 
-from . import database
-from . import cache
+import database
+import cache
 
 db: database.RobotData = None
 rds: cache.RobotCache = None
@@ -83,4 +83,35 @@ def get_sign_info(user_id):
     ret_data = db.do_select(sql + condition)[0]
     cnt_all = ret_data[0]
     cnt_day = ret_data[1]
-    return cnt_all, cnt_day
+    points = _get_user_points(user_id)
+    return cnt_all, cnt_day, points
+
+
+def _get_user_points(user_id):
+    sql = "select `days` from `user_continuous_sign` where `user_id`=%s" % user_id
+    data_lines = db.do_select(sql)
+
+    day_points = 0
+    con_points = 0
+    for line in data_lines:
+        line_day = int(line[0])
+        day_points += line_day
+        con_points += _calculate_points_by_days(line_day)
+    return day_points + con_points
+
+
+def _calculate_points_by_days(days):
+    _cal_period = 30
+    _points_mon = 19
+    p_mon = int(days / _cal_period) * _points_mon
+    d_res = days % _cal_period
+    if d_res >= 15:
+        p_res = 5
+    elif d_res >= 7:
+        p_res = 3
+    elif d_res >= 3:
+        p_res = 1
+    else:
+        p_res = 0
+
+    return p_mon + p_res
