@@ -29,10 +29,7 @@ async def _message_handler(event, message: qqbot.Message):
         await service.service_get_city_weather(msg_api, message)
     elif "/签到" in content:
         await service.service_user_do_sign(msg_api, message)
-    elif "/打卡" in content:
-        await service.service_user_do_sign(msg_api, message)
-    elif "/sign" in content:
-        await service.service_user_do_sign(msg_api, message)
+        await service.service_get_sign_info(msg_api, message)
     elif "/补签" in content:
         await service.service_user_re_sign(msg_api, message)
     elif "/查询" in content:
