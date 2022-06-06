@@ -50,7 +50,7 @@ async def service_get_sign_info(msg_api: qqbot.AsyncMessageAPI, message: qqbot.M
         if need_detail:
             send = qqbot.MessageSendRequest(
                 "<@%s>你的签到详情如下:\n\t目前积分: %5d分\n\t基础天数: %5d天\n\t连续%2d天次数:\t%3d次\n\t连续%2d天次数:\t%3d次\n\t连续%2d天次数:\t%3d次\n\t连续%2d天次数:\t%3d次\n" %
-                (user_id, cnt_days, points, 30, details[0], 15, details[1], 7, details[2], 3, details[3]),
+                (user_id, points, cnt_days, 30, details[0], 15, details[1], 7, details[2], 3, details[3]),
                 message.id
             )
         else:
