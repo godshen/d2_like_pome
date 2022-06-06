@@ -1,9 +1,15 @@
 import dao
 import qqbot
+import random
 
 
 async def service_user_do_sign(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message):
     try:
+        success_words = [
+            "签到成功啦୧(﹒︠ᴗ﹒︡)୨",
+            "好耶！积分喜加一！(〃'▽'〃)",
+            "成功啦！明天也不要忘记哦(〃'▽'〃)"
+        ]
         user_id = message.author.id
         if dao.check_is_signed(user_id) != 0:
             send = qqbot.MessageSendRequest("<@%s>今天已经签到过了呢(灬°ω°灬) " % message.author.id, message.id)
@@ -18,7 +24,7 @@ async def service_user_do_sign(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Me
                 dao.update_continuous_days(auto_id)
             else:
                 dao.insert_continuous_beginning(user_id)
-            send = qqbot.MessageSendRequest("<@%s>签到成功 " % message.author.id, message.id)
+            send = qqbot.MessageSendRequest("<@%s>%s " % (message.author.id, random.choice(success_words)), message.id)
     except:
         send = qqbot.MessageSendRequest("<@%s>签到失败 " % message.author.id, message.id)
     await msg_api.post_message(message.channel_id, send)
