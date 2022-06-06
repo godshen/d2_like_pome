@@ -33,7 +33,7 @@ async def _message_handler(event, message: qqbot.Message):
     elif "/补签" in content:
         await service.service_user_re_sign(msg_api, message)
     elif "/查询" in content:
-        await service.service_get_sign_info(msg_api, message)
+        await service.service_get_sign_info(msg_api, message, True)
     else:
         await service.service_default(msg_api, message)
 

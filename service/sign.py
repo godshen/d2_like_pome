@@ -42,14 +42,21 @@ async def service_user_re_sign(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Me
     await msg_api.post_message(message.channel_id, send)
 
 
-async def service_get_sign_info(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message):
+async def service_get_sign_info(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message, need_detail=False):
     try:
         user_id = message.author.id
-        _, cnt_days, points = dao.get_sign_info(user_id)
+        _, cnt_days, points, details = dao.get_sign_info(user_id)
         continuous_days = dao.get_continuous_days(user_id)
-        send = qqbot.MessageSendRequest("<@%s>你的签到信息如下:\n\t累计签到: %5d天\n\t连续签到: %5d天\n\t目前积分: %5d分" %
-                                        (user_id, cnt_days, continuous_days, points), message.id
-                                        )
+        if need_detail:
+            send = qqbot.MessageSendRequest(
+                "<@%s>你的签到详情如下:\n\t累计签到: %5d天\n\t目前积分: %5d分\n\t连续%2d天次数: %5d\n\t连续%2d天次数: %5d\n\t连续%2d天次数: %5d\n\t连续%2d天次数: %5d\n" %
+                (user_id, cnt_days, points, 30, details[0], 15, details[1], 7, details[2], 3, details[3]),
+                message.id
+            )
+        else:
+            send = qqbot.MessageSendRequest("<@%s>你的签到信息如下:\n\t累计签到: %5d天\n\t连续签到: %5d天\n\t目前积分: %5d分" %
+                                            (user_id, cnt_days, continuous_days, points), message.id
+                                            )
     except:
         send = qqbot.MessageSendRequest("<@%s>查询失败" % message.author.id, message.id)
     await msg_api.post_message(message.channel_id, send)

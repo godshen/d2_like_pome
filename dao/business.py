@@ -83,8 +83,8 @@ def get_sign_info(user_id):
     ret_data = db.do_select(sql + condition)[0]
     cnt_all = ret_data[0]
     cnt_day = ret_data[1]
-    points = _get_user_points(user_id)
-    return cnt_all, cnt_day, points
+    points, details = _get_user_points(user_id)
+    return cnt_all, cnt_day, points, details
 
 
 def _get_user_points(user_id):
@@ -93,11 +93,17 @@ def _get_user_points(user_id):
 
     day_points = 0
     con_points = 0
+    con_details = [0, 0, 0, 0]
+
     for line in data_lines:
         line_day = int(line[0])
         day_points += line_day
-        con_points += _calculate_points_by_days(line_day)
-    return day_points + con_points
+        calculate_res = _calculate_points_by_days(line_day)
+        con_points += calculate_res[0]
+        for i in range(4):
+            con_details[i] += calculate_res[i+1]
+
+    return [day_points + con_points, con_details]
 
 
 def _calculate_points_by_days(days):
@@ -106,15 +112,23 @@ def _calculate_points_by_days(days):
     _points_15 = 15
     _points_07 = 3
     _points_03 = 1
-    p_mon = int(days / _cal_period) * (_points_30 + _points_15 + _points_07 + _points_03)
+
+    d_30 = int(days / _cal_period)
+    p_mon = d_30 * (_points_30 + _points_15 + _points_07 + _points_03)
+
     d_res = days % _cal_period
     if d_res >= 15:
-        p_res = _points_15 + _points_07 + _points_03
-    elif d_res >= 7:
-        p_res = _points_07 + _points_03
-    elif d_res >= 3:
-        p_res = _points_03
+        d_15 = 1
     else:
-        p_res = 0
+        d_15 = 0
+    if d_res >= 7:
+        d_07 = 1
+    else:
+        d_07 = 0
+    if d_res >= 3:
+        d_03 = 1
+    else:
+        d_03 = 0
+    p_res = d_15 * _points_15 + d_07 * _points_07 + d_03 * _points_03
 
-    return p_mon + p_res
+    return [p_mon + p_res, d_30, d_15, d_07, d_03]
