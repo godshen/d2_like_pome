@@ -10,7 +10,7 @@ async def service_manage(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message)
         await msg_api.post_message(message.channel_id, send)
     else:
         if "排行榜" in msg_list[2]:
-            send = qqbot.MessageSendRequest("第%3d名:\t@<%s>" % (1, "12765512432620307406"), message.id)
+            send = qqbot.MessageSendRequest("第%d名:\t<@%s>" % (1, "12765512432620307406"), message.id)
             await msg_api.post_message(message.channel_id, send)
         elif "第一名" in msg_list[2]:
             send = qqbot.MessageSendRequest("必然是<@%s>" % "12765512432620307406", message.id)
