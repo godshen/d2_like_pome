@@ -5,18 +5,18 @@ import qqbot
 async def service_manage(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message):
     content = message.content
     msg_list = content.split(" ")
-    if len(msg_list) == 1:
+    if len(msg_list) == 2:
         send = qqbot.MessageSendRequest("侬行组撒", message.id)
         await msg_api.post_message(message.channel_id, send)
     else:
-        if "排名" in msg_list[1]:
+        if "排名" in msg_list[2]:
             send = qqbot.MessageSendRequest("还不造", message.id)
             await msg_api.post_message(message.channel_id, send)
-        elif "第一名" in msg_list[1]:
+        elif "第一名" in msg_list[2]:
             send = qqbot.MessageSendRequest("必然是<%s>" % "12765512432620307406", message.id)
             await msg_api.post_message(message.channel_id, send)
         else:
-            send = qqbot.MessageSendRequest(msg_list[1], message.id)
+            send = qqbot.MessageSendRequest(msg_list[2], message.id)
             await msg_api.post_message(message.channel_id, send)
 
 
