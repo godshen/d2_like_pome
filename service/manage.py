@@ -13,7 +13,7 @@ async def service_manage(msg_api: qqbot.AsyncMessageAPI, message: qqbot.Message)
             send = qqbot.MessageSendRequest("还不造", message.id)
             await msg_api.post_message(message.channel_id, send)
         elif "第一名" in msg_list[2]:
-            send = qqbot.MessageSendRequest("必然是<%s>" % "12765512432620307406", message.id)
+            send = qqbot.MessageSendRequest("必然是<@%s>" % "12765512432620307406", message.id)
             await msg_api.post_message(message.channel_id, send)
         else:
             send = qqbot.MessageSendRequest(msg_list[2], message.id)
