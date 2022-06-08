@@ -34,6 +34,11 @@ async def _message_handler(event, message: qqbot.Message):
         await service.service_user_re_sign(msg_api, message)
     elif "/查询" in content:
         await service.service_get_sign_info(msg_api, message, True)
+    elif "/管理" in content:
+        if message.author.id in ["5825676483738802511", "12765512432620307406"]:
+            await service.service_manage(msg_api, message)
+        else:
+            await service.service_manage_err(msg_api, message)
     else:
         await service.service_default(msg_api, message)
 

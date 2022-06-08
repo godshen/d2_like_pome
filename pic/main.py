@@ -20,6 +20,8 @@ if __name__ == "__main__":
     draw = ImageDraw.Draw(tp)
     draw.text((600, 530), "目前积分:\t%5d分" % 1120, (0, 0, 0), font=font)
     draw = ImageDraw.Draw(tp)
+    draw.text((600, 630), "积分排名:\t%5d+名" % 100, (0, 0, 0), font=font)
+    draw = ImageDraw.Draw(tp)
 
     # 保存
     tp.save("./output/x.png")

@@ -12,3 +12,8 @@ from .default import (
 )
 
 from .weather import service_get_city_weather
+
+from .manage import (
+    service_manage,
+    service_manage_err
+)
