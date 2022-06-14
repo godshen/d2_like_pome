@@ -108,8 +108,8 @@ def _get_user_points(user_id):
 
 def _calculate_points_by_days(days):
     _cal_period = 30
-    _points_30 = 19
-    _points_15 = 15
+    _points_30 = 10
+    _points_15 = 5
     _points_07 = 3
     _points_03 = 1
 
