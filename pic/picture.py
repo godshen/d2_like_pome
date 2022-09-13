@@ -12,10 +12,10 @@ def generata_pic(a, b, c, filename):
     if p_file.is_file():
         return filename + ".png"
     # 设置字体，如果没有，也可以不设置
-    font = ImageFont.truetype('/tmp/simsun.ttf', 30)
+    font = ImageFont.truetype(base_dir + 'simsun.ttf', 30)
 
     # 打开底版图片
-    imageFile = "/tmp/blank.jpg"
+    imageFile = base_dir + "blank.jpg"
     tp = Image.open(imageFile)
 
     draw = ImageDraw.Draw(tp)
