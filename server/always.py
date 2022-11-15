@@ -14,7 +14,7 @@ def get_username(t_token, is_test):
 
 def init_project():
     is_test = False
-    now_dir = os.path.abspath(os.path.dirname(__file__))
+    # now_dir = os.path.abspath(os.path.dirname(__file__))
     # os.environ['SSL_CERT_FILE'] = now_dir + "/config/qq-bot-cert.pem"
     appid_str = os.environ['QQ_ROBOT_APPID']  # always be "102006831"
     token_str = os.environ['QQ_ROBOT_TOKEN']  # just like "NvM0ZVRsamsPrpK61wzdcmbeK0maPSIj"
