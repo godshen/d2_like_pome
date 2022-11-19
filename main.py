@@ -34,31 +34,46 @@ async def _message_handler(event, message: qqbot.Message):
     elif "/签到" == content:
         await service.service_user_do_sign(msg_api, message)
         await service.service_get_sign_info(msg_api, message)
+
+    elif "/抽签" == content:
+        await service.service_draw_get_one(msg_api, message)
+
+    elif "/解签" == content:
+        await service.service_draw_solve_one(msg_api, message)
+
     elif "/图片" == content:
         await service.service_get_sign_picture(msg_api, message)
+
     elif "/补签" == content:
         await service.service_user_re_sign(msg_api, message)
+
     elif "/查询" == content:
         await service.service_get_sign_info(msg_api, message, True)
+
     elif "/抽奖" == content:
         await service.activity_at_join(msg_api, message)
+
     elif "/抽奖结果" == content:
         await service.activity_get_result(msg_api, message)
+
     elif "/开始抽奖" == content:
         if message.author.id in service.managers():
             await service.activity_at_start(msg_api, message)
         else:
             await service.service_manage_err(msg_api, message)
+
     elif "/结束抽奖" == content:
         if message.author.id in service.managers():
             await service.activity_at_end(msg_api, message)
         else:
             await service.service_manage_err(msg_api, message)
+
     elif "/管理" == content:
         if message.author.id in service.managers():
             await service.service_manage(msg_api, message)
         else:
             await service.service_manage_err(msg_api, message)
+
     else:
         await service.service_default(msg_api, message)
 

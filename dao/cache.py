@@ -13,7 +13,11 @@ class RobotCache:
         )
 
     def get_data(self, key):
-        return self._c.get(key).decode("utf-8")
+        ret_data = self._c.get(key)
+        if ret_data is None:
+            return None
+        else:
+            return ret_data.decode("utf-8")
 
     def set_data(self, key, val):
         return self._c.set(key, val)
