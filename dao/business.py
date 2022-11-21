@@ -186,6 +186,11 @@ def get_draw_one_number(key):
     return res
 
 
+def del_draw_one_number(key):
+    rds.rm_data(key)
+    return 0
+
+
 def set_draw_one_number(key, val):
     rds.set_data_exp(key, val, 86400)
     return 0

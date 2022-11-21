@@ -35,6 +35,8 @@ class D2LikePome(botpy.Client):
             if len(content_arr) == 2:
                 await service.service_draw_get_one(message)
             else:
+                if len(content_arr) == 3 and content_arr[2] == "逆天改命":
+                    await message.reply(content="别忘了咒语: /抽签 逆天改命 [任意咒语(不能空着)]")
                 if len(content_arr) == 4 and content_arr[2] == "逆天改命":
                     words = content_arr[3]
                     await service.service_draw_change_destiny(message, words)
