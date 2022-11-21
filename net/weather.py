@@ -1,22 +1,22 @@
 import json
 import aiohttp
 from typing import Dict, List
-from qqbot.model.message import MessageArkObj, MessageArkObjKv
+from botpy.types.message import ArkObj, ArkObjKv
 
 
-async def create_ark_obj_list(weather_dict) -> List[MessageArkObj]:
+async def create_ark_obj_list(weather_dict) -> List[ArkObj]:
     obj_list = [
-        MessageArkObj(obj_kv=[
-            MessageArkObjKv(key="desc", value=
+        ArkObj(obj_kv=[
+            ArkObjKv(key="desc", value=
                             weather_dict['result']['citynm'] + " " +
                             weather_dict['result']['weather'] + " " +
                             weather_dict['result']['days'] + " " +
                             weather_dict['result']['week'])
             ]
         ),
-        MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当日温度区间：" + weather_dict['result']['temperature'])]),
-        MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当前温度：" + weather_dict['result']['temperature_curr'])]),
-        MessageArkObj(obj_kv=[MessageArkObjKv(key="desc", value="当前湿度：" + weather_dict['result']['humidity'])])
+        ArkObj(obj_kv=[ArkObjKv(key="desc", value="当日温度区间：" + weather_dict['result']['temperature'])]),
+        ArkObj(obj_kv=[ArkObjKv(key="desc", value="当前温度：" + weather_dict['result']['temperature_curr'])]),
+        ArkObj(obj_kv=[ArkObjKv(key="desc", value="当前湿度：" + weather_dict['result']['humidity'])])
     ]
     return obj_list
 
