@@ -17,6 +17,7 @@ from .business import (
     get_managers_list,
     get_draw_one_number,
     set_draw_one_number,
+    del_draw_one_number,
     get_draw_one_poem,
     get_draw_one_explain,
     get_draw_one_len,

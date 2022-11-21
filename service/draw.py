@@ -41,6 +41,7 @@ async def service_draw_change_destiny(message: Message, words):
     is_words_set = dao.get_draw_one_destiny_words(destiny_key)
     if is_words_set is None:
         dao.set_draw_one_destiny_words(destiny_key, words)
+        _del_num_from_cache(uid_date)
         send = "少年可以继续抽签了"
     else:
         send = "请明日再来"
@@ -59,7 +60,7 @@ def _get_num_from_cache(uid_date):
 
 def _del_num_from_cache(uid_date):
     cache_key = uid_date + _suffix
-    return dao.get_draw_one_number(cache_key)
+    return dao.del_draw_one_number(cache_key)
 
 
 def _set_num_to_cache(uid_date, num):
