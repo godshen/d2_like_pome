@@ -16,6 +16,6 @@ def init_project():
     is_test = True
     appid_str = os.environ['QQ_ROBOT_APPID_STAND']
     token_str = os.environ['QQ_ROBOT_APPID_STAND']
-    t_token = qqbot.Token(appid_str, token_str)
-    get_username(t_token, is_test)
-    return t_token, is_test
+    # t_token = qqbot.Token(appid_str, token_str)
+    # get_username(t_token, is_test)
+    return is_test, appid_str, token_str
