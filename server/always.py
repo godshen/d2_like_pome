@@ -33,10 +33,10 @@ class D2LikePome(botpy.Client):
             await service.service_get_sign_info(message)
 
         elif "/抽签" == content:
-            await service.service_draw_get_one(msg_api, message)
+            await service.service_draw_get_one(message)
 
         elif "/解签" == content:
-            await service.service_draw_solve_one(msg_api, message)
+            await service.service_draw_solve_one(message)
 
         elif "/图片" == content:
             await service.service_get_sign_picture(message)
