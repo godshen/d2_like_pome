@@ -68,11 +68,9 @@ class D2LikePome(botpy.Client):
 if __name__ == "__main__":
     print("sjzez great forever")
 
-    is_test, appid, token = server.init_project()
-
-    service.init_service()
+    server.init_project()
+    appid, token = service.init_service()
 
     intents = botpy.Intents(public_guild_messages=True)
     client = D2LikePome(intents=intents)
     client.run(appid=appid, token=token)
-
