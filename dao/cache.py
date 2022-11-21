@@ -22,6 +22,9 @@ class RobotCache:
     def set_data(self, key, val):
         return self._c.set(key, val)
 
+    def set_data_exp(self, key, val, exp):
+        return self._c.set(key, val, exp)
+
     def rm_data(self, key):
         return self._c.delete(key)
 
