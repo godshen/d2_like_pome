@@ -16,13 +16,14 @@ class D2LikePome(botpy.Client):
         )
 
         # 先发送消息告知用户
-        await self.api.post_message(message.channel_id, content="command received: %s" % message.content)
+        # await self.api.post_message(message.channel_id, content="command received: %s" % message.content)
 
         content = ""
         content_arr = message.content.split(" ")
 
         if len(content_arr) >= 2:
             content = content_arr[1]
+        _log.info(content)
 
         if "/天气" == content:
             await service.service_get_city_weather(message)
