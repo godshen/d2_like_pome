@@ -3,14 +3,16 @@ import datetime
 
 from . import database
 from . import cache
+from . import file
 
 db: database.RobotData = None
 rds: cache.RobotCache = None
+fl: file.RobotFile = None
 managers_list: list[str] = None
 
 
 def init_dao():
-    global db, rds, managers_list
+    global db, rds, fl, managers_list
 
     db_host = os.environ['POME_DB_HOST']
     db_port = os.environ['POME_DB_PORT']
@@ -23,6 +25,9 @@ def init_dao():
     rds = cache.RobotCache()
 
     managers_list = os.environ['MANAGERS_LIST'].split(",")
+
+    draw_one_dir = os.environ['DRAW_ONE_FILE']
+    fl = file.RobotFile(draw_one_dir)
 
 
 def get_managers_list():
@@ -172,3 +177,27 @@ def _calculate_points_by_days(days):
     p_res = d_15 * _points_15 + d_07 * _points_07 + d_03 * _points_03
 
     return [p_mon + p_res, d_30, d_15+d_30, d_07+d_30, d_03+d_30]
+
+
+def get_draw_one_number(key):
+    res = rds.get_data(key)
+    if res is not None:
+        res = int(res)
+    return res
+
+
+def set_draw_one_number(key, val):
+    rds.set_data(key, val)
+    return 0
+
+
+def get_draw_one_len():
+    return fl.draw_one_len
+
+
+def get_draw_one_poem(num):
+    return fl.draw_one_map[num][0]
+
+
+def get_draw_one_explain(num):
+    return fl.draw_one_map[num][1]

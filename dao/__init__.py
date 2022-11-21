@@ -15,4 +15,9 @@ from .business import (
     redis_activity_participate,
     redis_activity_get_result,
     get_managers_list,
+    get_draw_one_number,
+    set_draw_one_number,
+    get_draw_one_poem,
+    get_draw_one_explain,
+    get_draw_one_len,
 )

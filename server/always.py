@@ -27,34 +27,50 @@ class D2LikePome(botpy.Client):
 
         if "/天气" == content:
             await service.service_get_city_weather(message)
+
         elif "/签到" == content:
             await service.service_user_do_sign(message)
             await service.service_get_sign_info(message)
+
+        elif "/抽签" == content:
+            await service.service_draw_get_one(msg_api, message)
+
+        elif "/解签" == content:
+            await service.service_draw_solve_one(msg_api, message)
+
         elif "/图片" == content:
             await service.service_get_sign_picture(message)
+
         elif "/补签" == content:
             await service.service_user_re_sign(message)
+
         elif "/查询" == content:
             await service.service_get_sign_info(message, True)
+
         elif "/抽奖" == content:
             await service.activity_at_join(message)
+
         elif "/抽奖结果" == content:
             await service.activity_get_result(message)
+
         elif "/开始抽奖" == content:
             if message.author.id in service.managers():
                 await service.activity_at_start(message)
             else:
                 await service.service_manage_err(message)
+
         elif "/结束抽奖" == content:
             if message.author.id in service.managers():
                 await service.activity_at_end(message)
             else:
                 await service.service_manage_err(message)
+
         elif "/管理" == content:
             if message.author.id in service.managers():
                 await service.service_manage(message)
             else:
                 await service.service_manage_err(message)
+
         else:
             await service.service_default(message)
 
@@ -66,5 +82,5 @@ def init_project():
     return c, a, t
 
 
-def run_project(client: D2LikePome, appid, token):
-    client.run(appid=appid, token=token)
+def run_project(c: D2LikePome, a, t):
+    c.run(appid=a, token=t)

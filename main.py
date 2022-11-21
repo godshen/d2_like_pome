@@ -10,5 +10,5 @@ if __name__ == "__main__":
     client, appid, token = server.init_project()
     server.run_project(client, appid, token)
 
-    logger = logging.get_logger()
-    logger.info("Exit Project SUCCESS")
+    _log = logging.get_logger()
+    _log.info("Exit Project SUCCESS")
