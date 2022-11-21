@@ -201,3 +201,17 @@ def get_draw_one_poem(num):
 
 def get_draw_one_explain(num):
     return fl.draw_one_map[num][1]
+
+
+def get_draw_one_destiny_words(key):
+    res = rds.get_data(key)
+    if res is not None:
+        res = str(res)
+    else:
+        res = None
+    return res
+
+
+def set_draw_one_destiny_words(key, val):
+    rds.set_data_exp(key, val, 86400)
+    return 0

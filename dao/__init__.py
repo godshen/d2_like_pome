@@ -20,4 +20,6 @@ from .business import (
     get_draw_one_poem,
     get_draw_one_explain,
     get_draw_one_len,
+    get_draw_one_destiny_words,
+    set_draw_one_destiny_words,
 )

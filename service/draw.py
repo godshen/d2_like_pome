@@ -4,7 +4,8 @@ from botpy.message import Message
 import hashlib
 import datetime
 
-_slat = "ZZLX_KJJY_GHGY_LJRW"
+_daily_control = "_draw_one_destiny"
+_default_slat = "ZZLX_KJJY_GHGY_LJRW"
 _suffix = "_draw_one"
 
 
@@ -33,6 +34,19 @@ async def service_draw_solve_one(message: Message):
     await message.reply(content=send)
 
 
+async def service_draw_change_destiny(message: Message, words):
+    uid = message.author.id
+    uid_date = _get_uid_date(uid)
+    destiny_key = uid_date + "_" + _daily_control
+    is_words_set = dao.get_draw_one_destiny_words(destiny_key)
+    if is_words_set is None:
+        dao.set_draw_one_destiny_words(destiny_key, words)
+        send = "少年可以重新抽签了"
+    else:
+        send = "请明日再来"
+    await message.reply(content=send)
+
+
 def _get_uid_date(user_id):
     today_str = datetime.datetime.today().strftime("%Y-%m-%d")
     return user_id + "_" + today_str
@@ -50,7 +64,12 @@ def _set_num_to_cache(uid_date, num):
 
 def _draw_inner_get_unique_id_by_day(uid_date):
     file_len = dao.get_draw_one_len()
-    unique_key = uid_date + "_" + _slat
+    destiny_key = uid_date + "_" + _daily_control
+    words_set = dao.get_draw_one_destiny_words(destiny_key)
+    if words_set is None:
+        unique_key = uid_date + "_" + _default_slat
+    else:
+        unique_key = uid_date + "_" + words_set
     key_md5 = hashlib.md5(unique_key.encode('utf-8'))
     key_int = int(key_md5.hexdigest(), 16)
     num = key_int % file_len + 1

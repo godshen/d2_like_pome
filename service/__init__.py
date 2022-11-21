@@ -30,4 +30,5 @@ from .activity import (
 from .draw import (
     service_draw_get_one,
     service_draw_solve_one,
+    service_draw_change_destiny,
 )

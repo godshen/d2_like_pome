@@ -23,7 +23,6 @@ class D2LikePome(botpy.Client):
 
         if len(content_arr) >= 2:
             content = content_arr[1]
-        _log.info(content)
 
         if "/天气" == content:
             await service.service_get_city_weather(message)
@@ -33,7 +32,12 @@ class D2LikePome(botpy.Client):
             await service.service_get_sign_info(message)
 
         elif "/抽签" == content:
-            await service.service_draw_get_one(message)
+            if len(content_arr) == 2:
+                await service.service_draw_get_one(message)
+            else:
+                if len(content_arr) == 4 and content_arr[2] == "逆天改命":
+                    words = content_arr[3]
+                    await service.service_draw_change_destiny(message, words)
 
         elif "/解签" == content:
             await service.service_draw_solve_one(message)
