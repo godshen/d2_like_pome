@@ -70,7 +70,7 @@ async def service_get_sign_info(message: Message, need_detail=False):
     except:
         pic_url = ""
         send = "<@%s>查询失败" % message.author.id
-    await message.reply(content=send, pic_url=pic_url)
+    await message.reply(content=send, image=pic_url)
 
 
 async def service_get_sign_picture(message: Message, need_detail=False):
@@ -82,4 +82,4 @@ async def service_get_sign_picture(message: Message, need_detail=False):
     pic_name = pic.generata_pic(cnt_days, continuous_days, points, today+"-"+user_id)
     pic_url = "https://www.d2robot.site/image/" + pic_name
     send = "<@%s>" % message.author.id
-    await message.reply(content=send, pic_url=pic_url)
+    await message.reply(content=send, image=pic_url)
