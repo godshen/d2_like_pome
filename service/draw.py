@@ -23,15 +23,15 @@ async def service_draw_get_one(message: Message):
                 await service_draw_change_destiny(message, words)
         else:
             await message.reply(content="<@%s> 请摆正姿势: /抽签 逆天改命 [任意咒语(不能空着)]" % uid)
+    else:
+        num = _get_num_from_cache(uid_date)
+        if num is None:
+            num = _draw_inner_get_unique_id_by_day(uid_date)
+            _set_num_to_cache(uid_date, num)
 
-    num = _get_num_from_cache(uid_date)
-    if num is None:
-        num = _draw_inner_get_unique_id_by_day(uid_date)
-        _set_num_to_cache(uid_date, num)
-
-    draw_poem = dao.get_draw_one_poem(num)
-    send = "<@%s> 久等啦！您抽中的是第 %d 签\n签诗：%s\n" % (uid, num, draw_poem)
-    await message.reply(content=send)
+        draw_poem = dao.get_draw_one_poem(num)
+        send = "<@%s> 久等啦！您抽中的是第 %d 签\n签诗：%s\n" % (uid, num, draw_poem)
+        await message.reply(content=send)
 
 
 async def service_draw_solve_one(message: Message):
