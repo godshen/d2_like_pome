@@ -19,7 +19,7 @@ class D2LikePome(botpy.Client):
         # await self.api.post_message(message.channel_id, content="command received: %s" % message.content)
 
         content = ""
-        content_arr = message.content.split(" ")
+        content_arr = message.content.split()
 
         if len(content_arr) >= 2:
             content = content_arr[1]

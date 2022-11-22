@@ -13,7 +13,7 @@ async def service_draw_get_one(message: Message):
     uid = message.author.id
     uid_date = _get_uid_date(uid)
 
-    content_arr = message.content.split(" ")
+    content_arr = message.content.split()
     if len(content_arr) >= 3:
         if content_arr[2] == "逆天改命":
             if len(content_arr) == 3:
