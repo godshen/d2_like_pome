@@ -12,6 +12,18 @@ _suffix = "_draw_one"
 async def service_draw_get_one(message: Message):
     uid = message.author.id
     uid_date = _get_uid_date(uid)
+
+    content_arr = message.content.split(" ")
+    if len(content_arr) >= 3:
+        if content_arr[2] == "逆天改命":
+            if len(content_arr) == 3:
+                await message.reply(content="<@%s> 别忘了咒语: /抽签 逆天改命 [任意咒语(不能空着)]" % uid)
+            else:
+                words = content_arr[3]
+                await service_draw_change_destiny(message, words)
+        else:
+            await message.reply(content="<@%s> 请摆正姿势: /抽签 逆天改命 [任意咒语(不能空着)]" % uid)
+
     num = _get_num_from_cache(uid_date)
     if num is None:
         num = _draw_inner_get_unique_id_by_day(uid_date)
@@ -42,9 +54,9 @@ async def service_draw_change_destiny(message: Message, words):
     if is_words_set is None:
         dao.set_draw_one_destiny_words(destiny_key, words)
         _del_num_from_cache(uid_date)
-        send = "少年可以继续抽签了"
+        send = "<@%s> 少年可以继续抽签了" % uid
     else:
-        send = "请明日再来"
+        send = "<@%s> 请明日再来" % uid
     await message.reply(content=send)
 
 
