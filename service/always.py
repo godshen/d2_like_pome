@@ -8,8 +8,8 @@ def ping_by_name():
 
 
 def init_service():
-    appid = os.environ['QQ_ROBOT_APPID']
-    token = os.environ['QQ_ROBOT_TOKEN']
+    appid = os.environ['QQ_ROBOT_APPID_STAND']
+    token = os.environ['QQ_ROBOT_TOKEN_STAND']
     dao.init_dao()
     net.init_net()
     ping_by_name()
