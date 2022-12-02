@@ -1,8 +1,8 @@
 .idea
 */.DS_Store
 .DS_Store
-qqbot.log
-qqbot.log.*
+botpy.log
+botpy.log.*
 */__pycache__
 /pic/output/*\.jpg
 /pic/output/*\.png
